@@ -98,6 +98,7 @@ The application requires a `config.json` file in the working directory.
 
 ## Future Work
 
+- [ ] Combine duplicate items with count (Item x5)
 - [ ] Multiple notification types
 
 ## License
