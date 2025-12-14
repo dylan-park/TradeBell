@@ -1,0 +1,5 @@
+/target
+# JSON Files
+./cache.json
+./config.json
+*.json
