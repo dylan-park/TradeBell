@@ -96,6 +96,10 @@ The application requires a `config.json` file in the working directory.
 - **No notifications?** Check the console logs. If Steam's API is lagging, the bot will warn you that trade history is missing. It will simply wait for the next successful API call.
 - **Rate Limits?** If you see 429 errors, try increasing the `polling_interval_seconds`.
 
+## Future Work
+
+- [ ] Multiple notification types
+
 ## License
 
 This project is dual-licensed under either:
