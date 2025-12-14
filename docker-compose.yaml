@@ -1,0 +1,11 @@
+services:
+  tradebell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tradebell
+    hostname: tradebell
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/app/config.json
+      - ./cache.json:/app/cache.json
