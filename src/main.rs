@@ -8,7 +8,7 @@ use anyhow::Result;
 use chrono::Utc;
 use log::{error, info, warn};
 use std::{
-    collections::{HashMap, HashSet},
+    collections::{BTreeMap, HashMap, HashSet},
     sync::Arc,
     time::Duration,
 };
@@ -189,8 +189,8 @@ async fn process_completed_trade(
     {
         message_lines.push("\n<b>Received:</b>".to_string());
         let names = resolve_asset_names(client, cache, &assets).await?;
-        for name in names {
-            message_lines.push(format!("- {}", name));
+        for line in group_and_format_items(names) {
+            message_lines.push(format!("- {}", line));
         }
     }
 
@@ -200,8 +200,8 @@ async fn process_completed_trade(
     {
         message_lines.push("\n<b>Given:</b>".to_string());
         let names = resolve_asset_names(client, cache, &assets).await?;
-        for name in names {
-            message_lines.push(format!("- {}", name));
+        for line in group_and_format_items(names) {
+            message_lines.push(format!("- {}", line));
         }
     }
 
@@ -303,4 +303,22 @@ impl AssetFallback for Asset {
         // History `assets_received` often just has IDs.
         format!("ID: {}", self.assetid)
     }
+}
+
+fn group_and_format_items(items: Vec<String>) -> Vec<String> {
+    let mut counts = BTreeMap::new();
+    for item in items {
+        *counts.entry(item).or_insert(0) += 1;
+    }
+
+    counts
+        .into_iter()
+        .map(|(name, count)| {
+            if count > 1 {
+                format!("{}x {}", count, name)
+            } else {
+                name
+            }
+        })
+        .collect()
 }
