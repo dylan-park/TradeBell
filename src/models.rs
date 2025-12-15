@@ -74,3 +74,48 @@ pub struct AssetClassInfo {
     #[serde(rename = "type")]
     pub type_: String,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn test_trade_offer_deserialization() {
+        let json_data = json!({
+            "tradeofferid": "123456",
+            "trade_offer_state": 3,
+            "message": "Hello",
+            "time_created": 1600000000,
+            "time_updated": 1600000060,
+            "accountid_other": 987654321
+        });
+
+        let offer: TradeOffer =
+            serde_json::from_value(json_data).expect("Failed to parse TradeOffer");
+
+        assert_eq!(offer.tradeofferid, "123456");
+        assert_eq!(offer.trade_offer_state, 3);
+        assert_eq!(offer.message, Some("Hello".to_string()));
+        assert_eq!(offer.time_created, 1600000000);
+        assert_eq!(offer.accountid_other, 987654321);
+    }
+
+    #[test]
+    fn test_asset_deserialization() {
+        let json_data = json!({
+            "appid": 440,
+            "contextid": "2",
+            "assetid": "5000",
+            "classid": "100",
+            "instanceid": "1",
+            "amount": "1"
+        });
+
+        let asset: Asset = serde_json::from_value(json_data).expect("Failed to parse Asset");
+
+        assert_eq!(asset.appid, 440);
+        assert_eq!(asset.assetid, "5000");
+        assert_eq!(asset.classid, "100");
+    }
+}

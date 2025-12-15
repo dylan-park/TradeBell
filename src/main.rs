@@ -322,3 +322,43 @@ fn group_and_format_items(items: Vec<String>) -> Vec<String> {
         })
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_group_items_single() {
+        let items = vec!["Key".to_string()];
+        let result = group_and_format_items(items);
+        assert_eq!(result, vec!["Key"]);
+    }
+
+    #[test]
+    fn test_group_items_multiple_distinct() {
+        let items = vec!["Key".to_string(), "Crate".to_string()];
+        // BTreeMap sorts keys, so Crate comes before Key
+        let result = group_and_format_items(items);
+        assert_eq!(result, vec!["Crate", "Key"]);
+    }
+
+    #[test]
+    fn test_group_items_duplicates() {
+        let items = vec!["Key".to_string(), "Key".to_string(), "Key".to_string()];
+        let result = group_and_format_items(items);
+        assert_eq!(result, vec!["3x Key"]);
+    }
+
+    #[test]
+    fn test_group_items_mixed() {
+        let items = vec![
+            "Key".to_string(),
+            "Crate".to_string(),
+            "Key".to_string(),
+            "Hat".to_string(),
+        ];
+        // Sorted: Crate, Hat, Key (2)
+        let result = group_and_format_items(items);
+        assert_eq!(result, vec!["Crate", "Hat", "2x Key"]);
+    }
+}
